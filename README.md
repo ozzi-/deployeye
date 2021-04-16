@@ -84,3 +84,7 @@ The expected response for "deathStarLaserControlUnit" would look like the follow
   "changelog":"https://deathstar.intranet.space/x/s8XIBQ"
 }
 ```
+
+### DB Setup
+You can either use MySQL Workbench or use https://github.com/tomoemon/mwb2sql to convert the current mwb file into the required INSERT statements to get your DB up and running:
+https://github.com/ozzi-/deployeye/blob/main/res/deployeye.mwb
