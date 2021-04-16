@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Deploy Eye</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Expires" content="0">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-store, must-revalidate, max-age=0">	
+	<link rel="stylesheet" type="text/css" href="res/css/style.css">
+	<link rel="icon" type="image/png" href="res/deployeye.png" />
+	<link rel="stylesheet" href="res/css/print.css">
+	<link rel="stylesheet" href="res/css/custom.css">
+	<link rel="stylesheet" href="res/css/bootstrap.min.css">
+	<link rel="stylesheet" href="res/css/tabulator_bootstrap.min.css">
+	<link rel="stylesheet" href="res/css/choices.min.css">
+	<link rel="stylesheet" href="res/css/flatpickr.min.css">
+</head>
+<body style="background: #EEEEEE;">
+	<script src="res/js/lib/jquery.min.js"></script>
+	<script src="res/js/lib/jspdf.min.js"></script>
+	<script src="res/js/lib/moment.min.js"></script>
+	<script src="res/js/lib/jspdf.plugin.autotable.js"></script>
+	<script src="res/js/lib/tabulator.min.js"></script>
+	<script src="res/js/deployeye/fe.js"></script>
+	<script src="res/js/deployeye/mainPage.js"></script>
+	<script src="res/js/deployeye/logic.js"></script>
+	<script src="res/js/lib/bootstrap.min.js"></script>
+	<script src="res/js/lib/popper.min.js"></script>
+	<script src="res/js/lib/choices.min.js"></script>
+	<script src="res/js/lib/print.min.js"></script>
+	<script src="res/js/lib/flatpickr.min.js"></script>
+	<script src="res/js/lib/sweetalert2.all.min.js"></script>
+	<div id="menu" class="container">
+		<div class="row">
+			<div class="row ml-1" style="padding-left:5px;">
+				<h2><a href="index.html"><img class="logo" alt="logo" src="res/deployeye.png"></a></h2> 
+			</div>
+			<nav aria-label="breadcrumb" style="padding-top:6px; padding-left: 25px;"> 
+				<ol class="breadcrumb" id="breadcrumbOl"></ol>
+			</nav>
+			<div id="userString" class="ml-auto mr-3" style="padding-top:29px"></div>
+		</div>
+	</div>
+	<div id="loading" style=" z-index: 999; width: 100px; height: 100px; position: absolute; top: 30%; left: 50%; margin-left: -50px;">
+		<div class="lds-roller"><div style="color:black;"></div><div style="color:black;"></div><div></div><div></div><div></div><div></div><div></div><div></div></div>	</div>
+	<div id="pageContainer" class="container"> </div>
+	<br>
+</body>
+</html>
