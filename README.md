@@ -9,7 +9,7 @@ It will keep track of:
 
 ![Dashboard](https://i.imgur.com/HbC0T1T.png)
 
-![History](https://i.imgur.com/N2n5EVL.png)
+![History](https://i.imgur.com/lHvbHiu.png)
 
 
 
