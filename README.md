@@ -87,6 +87,9 @@ The expected response for "deathStarLaserControlUnit" would look like the follow
   "changelog":"https://deathstar.intranet.space/x/s8XIBQ"
 }
 ```
+If the health string isn't "OK" it will be saved as the fail reason accordingly.
+
+Note: health may be a JSON array, in which case "OK" means the lenght of the array being zero. If the length isn't zero, than the json array will be flattend by toString and this string used as the fail reason.
 
 ### DB Setup
 You can either use MySQL Workbench or use https://github.com/tomoemon/mwb2sql to convert the current mwb file into the required INSERT statements to get your DB up and running:
