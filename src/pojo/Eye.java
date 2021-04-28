@@ -13,7 +13,9 @@ public class Eye {
 	private boolean lastCheckSucceeded;
 	private String currentChangelog;
 	private String lastCheckFailReason="";
-
+	private String cookieName;
+	private String cookieValue;
+	
 	public Eye() {
 		
 	}
@@ -123,6 +125,22 @@ public class Eye {
 	
 	public String getLastCheckFailReason() {
 		return lastCheckFailReason;
+	}
+
+	public String getCookieName() {
+		return cookieName;
+	}
+
+	public void setCookieName(String cookieName) {
+		this.cookieName = cookieName;
+	}
+
+	public String getCookieValue() {
+		return cookieValue;
+	}
+
+	public void setCookieValue(String cookieValue) {
+		this.cookieValue = cookieValue;
 	}
 
 }

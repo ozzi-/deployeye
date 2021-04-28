@@ -34,6 +34,7 @@ public class Scheduler   {
 			try {
 				Service.doChecks();
 			} catch (Exception e) {
+				e.printStackTrace();
 				Log.logWarning("Scheduler - Exception doing checks - "+e.getMessage()+" - "+e.getCause(), Scheduler.class);			
 			}
 		};

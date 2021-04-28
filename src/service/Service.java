@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import errorhandling.GlobalExceptionHandler;
 import helpers.Config;
+import helpers.Helpers;
 import helpers.JSONRef;
 import helpers.Log;
 import persistence.DB;
@@ -59,7 +60,7 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 
 	@Override
 	public void onStartup(Container container) {
-		final String version = "1.0";
+		final String version = "1.1";
 		Log.logInfo("Starting deployeye - " + version, this);
 
 		Thread.setDefaultUncaughtExceptionHandler(new GlobalExceptionHandler());
@@ -185,16 +186,38 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 		for (Eye eye : eyes) {
 			Log.logInfo("Starting Check Logic for "+eye.getName(), Service.class);
 			if(eye.didLastCheckSucceed()) {
-				JSONObject eyesJSON = new JSONObject(eye.getLastResponse());
-				String currentHealth = eyesJSON.getString(eye.getKwHealth()).toLowerCase();
-				String currentVersion = eyesJSON.getString(eye.getKwVersion());
-				String currentChangelog = eyesJSON.getString(eye.getKwChangelog());
-				eye.setCurrentChangelog(currentChangelog);
-				
-				if(currentHealth.equals("ok")) {
-					handleOK(eye, currentVersion);
-				}else {
-					handleAvailDown(eye,Reason.HEALTH_NOK,currentHealth.equals("nok")?"Generic Error":currentHealth);
+				Log.logInfo("Response: "+eye.getLastResponse(), Service.class);
+				boolean validResponse=true;
+				try {
+					new JSONObject(eye.getLastResponse());
+				}catch (Exception e) {
+					validResponse=false;
+					handleAvailDown(eye,Reason.HEALTH_NOK,"Response does not seem to be valid JSON");
+				}
+				if(validResponse) {
+					JSONObject eyesJSON = new JSONObject(eye.getLastResponse());
+					String currentHealth="";
+					Object healthObj = eyesJSON.get(eye.getKwHealth());
+					if(healthObj instanceof JSONArray) {
+						JSONArray healthEvents = eyesJSON.getJSONArray(eye.getKwHealth());
+						if(healthEvents.length()>0) { 
+							// i.E: "health":[[1619624880705,"some error"],[1619625601244,"another error!"]]
+							currentHealth = healthEvents.toString(); 						
+						}else {
+							currentHealth="ok";
+						}
+					}else {
+						currentHealth = eyesJSON.getString(eye.getKwHealth()).toLowerCase();
+					}
+					String currentVersion = eyesJSON.getString(eye.getKwVersion());
+					String currentChangelog = eyesJSON.getString(eye.getKwChangelog());
+					eye.setCurrentChangelog(currentChangelog);
+					
+					if(currentHealth.equals("ok")) {
+						handleOK(eye, currentVersion);
+					}else {
+						handleAvailDown(eye,Reason.HEALTH_NOK,currentHealth.equals("nok")?"Generic Error":currentHealth);
+					}
 				}
 			}else {
 				handleAvailDown(eye,Reason.CONNECTION_FAILED,eye.getLastCheckFailReason());
@@ -291,7 +314,17 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 				url = new URL(eye.getUrl());
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
-				conn.setConnectTimeout(3000);
+				// TODO make this configurable
+				conn.setConnectTimeout(3500);
+				if(eye.getCookieName()!=null && eye.getCookieValue()!=null) {
+					String cookieValue=eye.getCookieValue();
+					if(eye.getCookieValue().startsWith("@")) {
+						Log.logInfo("Loading cookie value from file '"+eye.getCookieValue()+"' as starting with @", Service.class);
+						cookieValue = Helpers.readFile(eye.getCookieValue().substring(1));
+					}
+					Log.logInfo("Adding cookie "+eye.getCookieName()+"="+cookieValue, Service.class);
+					conn.setRequestProperty("Cookie",eye.getCookieName()+"="+cookieValue+";");
+				}
 				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 				String line;
 				while ((line = rd.readLine()) != null) {

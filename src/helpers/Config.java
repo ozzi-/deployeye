@@ -108,6 +108,12 @@ public class Config {
 				 String kwHealth = eyeJO.getString("keyword_health");
 				 String kwChangelog = eyeJO.getString("keyword_changelog");
 				 Eye eye = new Eye(name,url,kwVersion,kwBranch,kwHealth,kwChangelog);
+				 if(eyeJO.has("cookie_name")) {
+					 eye.setCookieName(eyeJO.getString("cookie_name"));
+				 }
+				 if(eyeJO.has("cookie_value")) {
+					 eye.setCookieValue(eyeJO.getString("cookie_value"));
+				 }
 				 Log.logInfo("Loaded Eye '"+name+"'", Config.class);
 				 Service.eyes.add(eye);
 			}
