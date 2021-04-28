@@ -70,10 +70,13 @@ Example configuration:
     "keyword_version" : "psu_version",
     "keyword_branch" : "psu_branch",
     "keyword_health" : "health",
-    "keyword_changelog" : "changelog"
+    "keyword_changelog" : "changelog",
+    "cookie_name" : "authToken",
+    "cookie_value": "imperialPassword123"
   }
 ]
 ```
+Note: if cookie_value starts with a @, then the following string is interpreted as a file path to read as the value
 
 The expected response for "deathStarLaserControlUnit" would look like the following:
 ```json
