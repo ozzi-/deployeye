@@ -236,7 +236,7 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 			if(avails.size()!=0) {
 				Availability latest = avails.get(0);
 				if(latest.getRecover_date()==null) {
-					Log.logInfo(eye.getName()+" went up",Service.class);
+					Log.logInfo(eye.getName()+" went back up",Service.class);
 					ArrayList<Val> vals2 = new ArrayList<Val>();
 					vals2.add(new Val(latest.getId()));
 					DB.doUpdate("UPDATE availability SET availability_recover_date= now() WHERE availability_id = ?;", vals2);
@@ -320,10 +320,11 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 					String cookieValue=eye.getCookieValue();
 					if(eye.getCookieValue().startsWith("@")) {
 						Log.logInfo("Loading cookie value from file '"+eye.getCookieValue()+"' as starting with @", Service.class);
-						cookieValue = Helpers.readFile(eye.getCookieValue().substring(1));
+						cookieValue = Helpers.readFileToStringWithoutNewlines(eye.getCookieValue().substring(1));
 					}
-					Log.logInfo("Adding cookie "+eye.getCookieName()+"="+cookieValue, Service.class);
-					conn.setRequestProperty("Cookie",eye.getCookieName()+"="+cookieValue+";");
+					String cookieString = eye.getCookieName()+"="+cookieValue;
+					Log.logInfo("Adding cookie '"+cookieString+"'", Service.class);
+					conn.setRequestProperty("Cookie",cookieString);
 				}
 				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 				String line;

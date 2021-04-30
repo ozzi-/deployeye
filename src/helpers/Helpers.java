@@ -77,7 +77,7 @@ public class Helpers {
 		return listOfFilesFiltered;
 	}
 
-	public static String readFile(String path) throws Exception {
+	public static String readFileToStringWithoutNewlines(String path) throws Exception {
 		Log.logInfo( "Reading file " + path, Helpers.class);
 		byte[] encoded;
 		try {
@@ -85,13 +85,13 @@ public class Helpers {
 		} catch (Exception e) {
 			throw new Exception("Could not read file: " + path);
 		}
-		return new String(encoded, "UTF-8");
+		return new String(encoded, "UTF-8").replace("\n", "").replace("\r", "");
 	}
 
 	public static JSONObject loadConfig(String path) throws Exception {
 		String json = "";
 		try {
-			json = readFile(path);
+			json = readFileToStringWithoutNewlines(path);
 		} catch (IOException e) {
 			throw new Exception("Cannot load test json file in loadConfig!");
 		}

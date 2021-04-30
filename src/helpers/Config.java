@@ -55,7 +55,7 @@ public class Config {
 	public static void loadAppConfig() {
 		String json = "";
 		try {
-			json = Helpers.readFile(getBasePath()+"app.json");
+			json = Helpers.readFileToStringWithoutNewlines(getBasePath()+"app.json");
 		} catch (Exception e) {
 			Log.logException(e, Config.class);
 			System.err.println("Cannot load app config json file!");
@@ -89,7 +89,7 @@ public class Config {
 	public static void loadEyes() {
 		String json = "";
 		try {
-			json = Helpers.readFile(getBasePath()+"eyes.json");
+			json = Helpers.readFileToStringWithoutNewlines(getBasePath()+"eyes.json");
 		} catch (Exception e) {
 			Log.logException(e, Config.class);
 			System.err.println("Cannot load eyes json file!");
@@ -127,7 +127,7 @@ public class Config {
 	public static void loadMailConfig() {
 		String json = "";
 		try {
-			json = Helpers.readFile(getBasePath()+"mail.json");
+			json = Helpers.readFileToStringWithoutNewlines(getBasePath()+"mail.json");
 		} catch (Exception e) {
 			Log.logException(e, MailAccount.class);
 			System.err.println("Cannot load mail config json file!");

@@ -8,6 +8,7 @@ window.onerror = function(msg, url, line, col, error) {
 	showAlert("Something went wrong","\""+error+"\"","error");
 };
 
+window.onunload = function(){}; 
 
 function showAlert(title,text,type){
 	Swal.fire({
