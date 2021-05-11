@@ -9,7 +9,7 @@ It will keep track of:
 
 ![Dashboard](https://i.imgur.com/HbC0T1T.png)
 
-![History](https://i.imgur.com/N2n5EVL.png)
+![History](https://i.imgur.com/lHvbHiu.png)
 
 
 
@@ -70,10 +70,13 @@ Example configuration:
     "keyword_version" : "psu_version",
     "keyword_branch" : "psu_branch",
     "keyword_health" : "health",
-    "keyword_changelog" : "changelog"
+    "keyword_changelog" : "changelog",
+    "cookie_name" : "authToken",
+    "cookie_value": "imperialPassword123"
   }
 ]
 ```
+Note: if cookie_value starts with a @, then the following string is interpreted as a file path to read as the value
 
 The expected response for "deathStarLaserControlUnit" would look like the following:
 ```json
@@ -84,6 +87,9 @@ The expected response for "deathStarLaserControlUnit" would look like the follow
   "changelog":"https://deathstar.intranet.space/x/s8XIBQ"
 }
 ```
+If the health string isn't "OK" it will be saved as the fail reason accordingly.
+
+Note: health may be a JSON array, in which case "OK" means the lenght of the array being zero. If the length isn't zero, than the json array will be flattend by toString and this string used as the fail reason.
 
 ### DB Setup
 You can either use MySQL Workbench or use https://github.com/tomoemon/mwb2sql to convert the current mwb file into the required INSERT statements to get your DB up and running:
