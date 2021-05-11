@@ -41,6 +41,10 @@ import pojo.Version;
 @Singleton
 public class Service extends ResourceConfig implements ContainerLifecycleListener {
 
+	// TODO Improve frontend Error Handling 
+	// "TypeError: response is undefined"
+	// https://deployeye.XXX.ch/deployeye/frontend/index.html?page=eye&id=122a%27%22%3E%3CB%3E
+	
 	public static ArrayList<Eye> eyes = new ArrayList<Eye>();
 	private static final int pageSize = 10;
 	
