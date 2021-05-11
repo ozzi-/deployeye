@@ -1,5 +1,7 @@
 package pojo;
 
+import java.util.ArrayList;
+
 public class Eye {
 
 	private int id;
@@ -15,28 +17,26 @@ public class Eye {
 	private String lastCheckFailReason="";
 	private String cookieName;
 	private String cookieValue;
+	private int timeout = 3000;
+	private ArrayList<String> notificationRecipients = new ArrayList<String>();
 	
 	public Eye() {
 		
 	}
 	
-	public Eye(int id, String name, String url, String kwVersion, String kwBranch, String kwHealth, String kwChangelog) {
-		this.setId(id);
+	public Eye(String name, String url, String kwVersion, String kwBranch, String kwHealth, String kwChangelog, Integer timeout, ArrayList<String> notificationRecipients) {
 		this.setName(name);
 		this.setUrl(url);
 		this.setKwVersion(kwVersion);
 		this.setKwBranch(kwBranch);
 		this.setKwHealth(kwHealth);
 		this.setKwChangelog(kwChangelog);
-	}
-
-	public Eye(String name, String url, String kwVersion, String kwBranch, String kwHealth, String kwChangelog) {
-		this.setName(name);
-		this.setUrl(url);
-		this.setKwVersion(kwVersion);
-		this.setKwBranch(kwBranch);
-		this.setKwHealth(kwHealth);
-		this.setKwChangelog(kwChangelog);
+		if(timeout!=null) {
+			this.setTimeout(timeout);
+		}
+		if(notificationRecipients!=null) {
+			this.setNotificationRecipients(notificationRecipients);			
+		}
 	}
 
 	public String getName() {
@@ -141,6 +141,22 @@ public class Eye {
 
 	public void setCookieValue(String cookieValue) {
 		this.cookieValue = cookieValue;
+	}
+
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+
+	public ArrayList<String> getNotificationRecipients() {
+		return notificationRecipients;
+	}
+
+	public void setNotificationRecipients(ArrayList<String> notificationRecipients) {
+		this.notificationRecipients = notificationRecipients;
 	}
 
 }

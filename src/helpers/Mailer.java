@@ -13,6 +13,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import pojo.Eye;
+
 public class Mailer {
 
     private static HashMap<String, String> subjectsLookup = new HashMap<String, String>();
@@ -27,6 +29,12 @@ public class Mailer {
 			}
 		};
 		new Thread(mailSender).start();
+	}
+	
+	public static void sendMailToRecipients(Eye eye, String subject, String content) {
+		for (String recipient : eye.getNotificationRecipients()) {
+			Mailer.sendMailAsync(recipient, subject, content);
+		}		
 	}
 	
 	private static boolean sendSimpleMailSMTPInternal(String smtpHost, int smtpPort, String smtpUser, String smtpPassword,
@@ -66,7 +74,7 @@ public class Mailer {
 			Transport.send(msg);
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.logWarning("Was not able to send mail to '"+to+"' with subject '"+subject+"'", Mailer.class);
 			Log.logException(e,Mailer.class);
 		}
 		return false;

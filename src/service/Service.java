@@ -29,6 +29,7 @@ import helpers.Config;
 import helpers.Helpers;
 import helpers.JSONRef;
 import helpers.Log;
+import helpers.Mailer;
 import persistence.DB;
 import pojo.Availability;
 import pojo.Eye;
@@ -240,7 +241,10 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 			if(avails.size()!=0) {
 				Availability latest = avails.get(0);
 				if(latest.getRecover_date()==null) {
-					Log.logInfo(eye.getName()+" went back up",Service.class);
+					String event = eye.getName()+" recovered";
+					String eventLong = eye.getName()+" ("+currentVersion+")"+" has recovered on "+Helpers.getCurrentDateTime();
+					Log.logInfo(eventLong,Service.class);
+					Mailer.sendMailToRecipients(eye, event, eventLong);
 					ArrayList<Val> vals2 = new ArrayList<Val>();
 					vals2.add(new Val(latest.getId()));
 					DB.doUpdate("UPDATE availability SET availability_recover_date= now() WHERE availability_id = ?;", vals2);
@@ -256,7 +260,10 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 			}else{
 				Version latest = versions.get(0);
 				if(!latest.getString().equals(currentVersion)) {
-					Log.logInfo(eye.getName()+" ("+eye.getId()+") changed its version from "+latest.getString()+" to "+currentVersion, Service.class);
+					String event = eye.getName()+" changed its version to "+currentVersion;
+					String eventLong = eye.getName()+" changed its version from "+latest.getString()+" to "+currentVersion+" on "+Helpers.getCurrentDateTime();
+					Mailer.sendMailToRecipients(eye, event, eventLong);
+					Log.logInfo(eventLong, Service.class);
 					insertNewVersion(eye.getId(),currentVersion);							
 				}
 			}
@@ -270,12 +277,15 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 	private static void handleAvailDown(Eye eye, int reasonCode, String reasonDescription) {
 		ArrayList<Val> vals = new ArrayList<Val>();
 		vals.add(new Val(eye.getId()));
+		String event = eye.getName()+" went down";
+		String eventLong= eye.getName()+" went down on "+Helpers.getCurrentDateTime()+" - "+reasonDescription;
 		try {
 			RS rs = DB.doSelect("SELECT * FROM availability WHERE availability_eye_idfk = ? ORDER BY availability_down_date DESC LIMIT 1;", vals);
 			ArrayList<Availability> avails = JSONRef.createFromRS(rs.getRs(), Availability.class);
 			rs.close();
 			if(avails.size()==0) {
 				insertNewAvail(eye.getId(),reasonCode, reasonDescription);
+				Mailer.sendMailToRecipients(eye, event, eventLong);
 				Log.logInfo("Peristing first availability issue for "+eye.getName(), Service.class);
 
 			}else {
@@ -284,6 +294,7 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 					Log.logInfo(eye.getName()+" is still down", Service.class);
 				}else {
 					insertNewAvail(eye.getId(), reasonCode, reasonDescription);
+					Mailer.sendMailToRecipients(eye, event, eventLong);
 					Log.logInfo(eye.getName()+" went down", Service.class);
 				}
 			}
@@ -310,7 +321,7 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 
 	private static void doHTTPGetCheck() {
 		for (Eye eye : eyes) {
-			Log.logInfo("HTTP Get "+eye.getUrl(), Service.class);
+			Log.logInfo("HTTP Get "+eye.getUrl()+" - timeout is: "+eye.getTimeout(), Service.class);
 
 			StringBuilder result = new StringBuilder();
 			URL url;
@@ -318,8 +329,7 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 				url = new URL(eye.getUrl());
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
-				// TODO make this configurable
-				conn.setConnectTimeout(3500);
+				conn.setConnectTimeout(eye.getTimeout());
 				if(eye.getCookieName()!=null && eye.getCookieValue()!=null) {
 					String cookieValue=eye.getCookieValue();
 					if(eye.getCookieValue().startsWith("@")) {
@@ -341,8 +351,7 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 			} catch (Exception e) {
 				eye.setLastCheckSucceeded(false);
 				eye.setLastCheckFailReason(e.getClass().getName()+": "+e.getMessage());
-				Log.logException(e, Service.class);
-				e.printStackTrace();
+				Log.logInfo("Exception when doing HTTP GET on '"+eye.getUrl()+"' - "+e.getClass().getName()+": "+e.getMessage(), Service.class);
 			}
 		}
 	}
