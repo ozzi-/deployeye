@@ -35,7 +35,7 @@ Use this default template and adjust where relevant
 ```
 
 ### mail.json
-In place for future functionality (email alerting when services go down)
+mail.json configures the mail account which will be used to send mail notifications.
 ```json
 {
     "address": "deployeye@something.com",
@@ -72,10 +72,23 @@ Example configuration:
     "keyword_health" : "health",
     "keyword_changelog" : "changelog",
     "cookie_name" : "authToken",
-    "cookie_value": "imperialPassword123"
+    "cookie_value": "imperialPassword123",
+	"notification_recipients":["maintenance@imperial.gov","bevel.lemelisk@imperial.gov"]
+  },{
+    "name" : "laserCanons",
+    "url" : "https://192.168.150.150:443/check-health/",
+    "keyword_version" : "version",
+    "keyword_branch" : "branch",
+    "keyword_health" : "health",
+    "keyword_changelog" : "changelog",
+    "cookie_name" : "authToken",
+    "cookie_value": "@/opt/deployeye/creds/laserCookie"
   }
 ]
 ```
+When setting notification_recipients, the recipients will receive e-mail notifications when services go down, recover or change its version.
+
+
 Note: if cookie_value starts with a @, then the following string is interpreted as a file path to read as the value
 
 The expected response for "deathStarLaserControlUnit" would look like the following:
