@@ -64,21 +64,16 @@ public class DB {
 		if (resultSet == null) {
 			return 0;
 		}
+		int rowCount=0;
 		try {
-			resultSet.last();
-			return resultSet.getRow();
-		} catch (SQLException exp) {
-			exp.printStackTrace();
-		} finally {
-			try {
-				resultSet.beforeFirst();
-			} catch (SQLException exp) {
-				exp.printStackTrace();
+			while(resultSet.next()) {
+				rowCount++;
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		return 0;
+		return rowCount;
 	}
-
 	
 	public static RS doSelect(String query) throws SQLException {
 		ArrayList<Val> values = new ArrayList<Val>();
