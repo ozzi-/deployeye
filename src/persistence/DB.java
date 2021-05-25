@@ -69,16 +69,17 @@ public class DB {
 			while(resultSet.next()) {
 				rowCount++;
 			}
+			resultSet.beforeFirst();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return rowCount;
 	}
-	
+
 	public static RS doSelect(String query) throws SQLException {
 		ArrayList<Val> values = new ArrayList<Val>();
 		Connection con = getDataSource().getConnection();
-		PreparedStatement stmt = con.prepareStatement(query);
+		PreparedStatement stmt = con.prepareStatement(query,  ResultSet.TYPE_SCROLL_SENSITIVE);
 		bindStatementParams(values, stmt);
 		ResultSet rs = stmt.executeQuery();
 				
@@ -87,7 +88,7 @@ public class DB {
 	
 	public static RS doSelect(String query, ArrayList<Val> values) throws SQLException {
 		Connection con = getDataSource().getConnection();
-		PreparedStatement stmt = con.prepareStatement(query);
+	    PreparedStatement stmt = con.prepareStatement(query,  ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);		
 		bindStatementParams(values, stmt);
 		ResultSet rs = stmt.executeQuery();
 				
@@ -139,7 +140,7 @@ public class DB {
 
 	public static int doUpdate(String query, ArrayList<Val> values) throws SQLException {
 		Connection con = getDataSource().getConnection();
-		PreparedStatement stmt = con.prepareStatement(query);
+		PreparedStatement stmt = con.prepareStatement(query,  ResultSet.TYPE_SCROLL_SENSITIVE);
 		bindStatementParams(values, stmt);
 		int i = stmt.executeUpdate();
 		stmt.close();
