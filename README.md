@@ -63,7 +63,9 @@ Example configuration:
     "keyword_version" : "version",
     "keyword_branch" : "branch",
     "keyword_health" : "health",
-    "keyword_changelog" : "changelog"
+    "keyword_changelog" : "changelog",
+    "header_name" : "X-API-KEY",
+    "header_value" : "W7W-a3Lp~z82[`U.d"
   },{
     "name" : "deathStarPowerSupply",
     "url" : "https://192.168.200.23:443/check-health/",

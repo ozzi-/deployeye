@@ -67,7 +67,7 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 
 	@Override
 	public void onStartup(Container container) {
-		final String version = "1.1";
+		final String version = "1.2";
 		Log.logInfo("Starting deployeye - " + version, this);
 
 		Thread.setDefaultUncaughtExceptionHandler(new GlobalExceptionHandler());
@@ -331,6 +331,9 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 				url = new URL(eye.getUrl());
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");
+				if(eye.getHeaderName()!=null && eye.getHeaderValue()!=null) {
+					conn.setRequestProperty(eye.getHeaderName(), eye.getHeaderValue());
+				}
 				conn.setConnectTimeout(eye.getTimeout());
 				if(eye.getCookieName()!=null && eye.getCookieValue()!=null) {
 					String cookieValue=eye.getCookieValue();

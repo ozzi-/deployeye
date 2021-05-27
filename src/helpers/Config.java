@@ -120,6 +120,12 @@ public class Config {
 				if (eyeJO.has("cookie_value")) {
 					eye.setCookieValue(eyeJO.getString("cookie_value"));
 				}
+				if (eyeJO.has("header_value")) {
+					eye.setHeaderValue(eyeJO.getString("header_value"));
+				}
+				if (eyeJO.has("header_name")) {
+					eye.setHeaderName(eyeJO.getString("header_name"));
+				}
 				Log.logInfo("Loaded Eye '" + name + "'", Config.class);
 				Service.eyes.add(eye);
 			}

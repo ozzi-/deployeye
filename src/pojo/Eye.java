@@ -17,6 +17,9 @@ public class Eye {
 	private String lastCheckFailReason="";
 	private String cookieName;
 	private String cookieValue;
+	private String headerName;
+	private String headerValue;
+	
 	private int timeout = 3000;
 	private ArrayList<String> notificationRecipients = new ArrayList<String>();
 	
@@ -157,6 +160,22 @@ public class Eye {
 
 	public void setNotificationRecipients(ArrayList<String> notificationRecipients) {
 		this.notificationRecipients = notificationRecipients;
+	}
+
+	public String getHeaderName() {
+		return headerName;
+	}
+
+	public void setHeaderName(String headerName) {
+		this.headerName = headerName;
+	}
+
+	public String getHeaderValue() {
+		return headerValue;
+	}
+
+	public void setHeaderValue(String headerValue) {
+		this.headerValue = headerValue;
 	}
 
 }
