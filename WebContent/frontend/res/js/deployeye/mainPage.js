@@ -52,8 +52,16 @@ function loadEye(eye, updateAvail){
 		eyeStateNode.textContent = '';
 		eyeStateNode.append(eyeBtn);
 	}
+}
 
-}  
+function reload(){
+	var secret = prompt("Enter admin secret");
+	doRequestSecret("POST", "../reload", reloadDone,secret);
+}
+
+function reloadDone(){
+	alert("Reload performed");
+}
 
 function parseAvailabilityData(eye){
 	var res = {};

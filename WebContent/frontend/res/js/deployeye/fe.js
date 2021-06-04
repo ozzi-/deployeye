@@ -184,11 +184,15 @@ function doRequestBody(method, data, type, url, callback, params) {
 	doRequestBodyInternal(method,data,type,url,callback,params);
 }
 
+function doRequestSecret(method, url, callback,secret){
+	doRequestBodyInternal(method,null,null,url,callback,[],secret);
+}
+
 function doRequest(method, url, callback, params) {
 	doRequestBodyInternal(method,null,null,url,callback,params);
 }
 
-function doRequestBodyInternal(method,data,type,url,callback,params){
+function doRequestBodyInternal(method,data,type,url,callback,params,secret){
 	openRequests++;
 	var request = new XMLHttpRequest();
 
@@ -238,7 +242,9 @@ function doRequestBodyInternal(method,data,type,url,callback,params){
 		request.setRequestHeader("Content-Type", type);		
 	}
 	request.setRequestHeader("Cache-Control", "max-age=0");
-
+	if(secret!=null){
+		request.setRequestHeader("X-SECRET", secret);
+	}
 	request.setRequestHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 	if(data!=null){
 		request.send(data);

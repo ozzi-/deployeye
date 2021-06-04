@@ -119,7 +119,7 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 		String secret = headers.getHeaderString("X-SECRET");
 		if(secret==null || !secret.equals(Config.getAdminSecret())) {
 			Log.logWarning("No or invalid admin secret provided", Service.class);
-			return Response.status(403).build();
+			return Response.status(403).entity("invalid secret provided").type("text/plain").build();
 		}
 		Config.loadMailConfig();
 		Config.loadAppConfig();
@@ -164,7 +164,6 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 			JsonObject errJo = new JsonObject();
 			errJo.addProperty("error", "Cannot find eye with ID '"+id+"'");
 			return Response.status(400).entity(errJo.toString()).type("application/json").build();
-			//throw new NullPointerException("Could not find Eye with the ID '"+id+"'");
 		}
 		jo.put("eye_url", eye.getUrl());
 		jo.put("eye_changelog", eye.getCurrentChangelog());
