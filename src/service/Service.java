@@ -194,15 +194,16 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 			Log.logInfo("Starting Check Logic for "+eye.getName(), Service.class);
 			if(eye.didLastCheckSucceed()) {
 				Log.logInfo("Response: "+eye.getLastResponse(), Service.class);
+				JSONObject eyesJSON;
 				boolean validResponse=true;
 				try {
-					new JSONObject(eye.getLastResponse());
+					eyesJSON= new JSONObject(eye.getLastResponse());
 				}catch (Exception e) {
 					validResponse=false;
 					handleAvailDown(eye,Reason.HEALTH_NOK,"Response does not seem to be valid JSON");
 				}
 				if(validResponse) {
-					JSONObject eyesJSON = new JSONObject(eye.getLastResponse());
+					eyesJSON = new JSONObject(eye.getLastResponse());
 					String currentHealth="";
 					Object healthObj = eyesJSON.get(eye.getKwHealth());
 					if(healthObj instanceof JSONArray) {
