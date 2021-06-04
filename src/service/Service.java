@@ -9,6 +9,7 @@ import java.util.List;
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
@@ -37,8 +38,7 @@ import pojo.Val;
 @Singleton
 public class Service extends ResourceConfig implements ContainerLifecycleListener {
 
-	
-	// TODO reload cfg call
+	// TODO page=eye -> refresh scrolls up using FF
 	
 	private static List<Eye> eyes = Collections.synchronizedList(new ArrayList<Eye>());
 	private static final int pageSize = 10;
@@ -109,6 +109,24 @@ public class Service extends ResourceConfig implements ContainerLifecycleListene
 			}
 		}
 		return null;
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/reload")
+	public Response doReload(@Context HttpHeaders headers) throws Exception {
+		Log.logInfo("called /reload", this);
+		String secret = headers.getHeaderString("X-SECRET");
+		if(secret==null || !secret.equals(Config.getAdminSecret())) {
+			Log.logWarning("No or invalid admin secret provided", Service.class);
+			return Response.status(403).build();
+		}
+		Config.loadMailConfig();
+		Config.loadAppConfig();
+		Config.loadEyesFromConfig();
+		persistLoadedEyes();
+		
+		return Response.status(200).entity("{}").type("application/json").build();
 	}
 
 	@GET

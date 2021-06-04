@@ -27,6 +27,7 @@ public class Config {
 	private static int dbBackupKeepForXDays;
 	private static String dbBackupDumpBinary;
 	private static String dbName;
+	private static String adminSecret;
 
 	public static String getBasePath() throws Exception {
 		String basePath = "";
@@ -70,6 +71,7 @@ public class Config {
 			dbUser = configJSON.getString("dbUser");
 			dbPW = configJSON.getString("dbPW");
 			dbPoolSize = configJSON.getInt("dbPoolSize");
+			adminSecret = configJSON.getString("adminSecret");
 
 			dbBackupIntervalInMinutes = configJSON.getInt("dbBackupIntervalInMinutes");
 			dbBackupDumpBinary = configJSON.getString("dbBackupDumpBinary");
@@ -84,6 +86,7 @@ public class Config {
 	}
 
 	public static void loadEyesFromConfig() {
+		Service.getEyes().clear();
 		String json = "";
 		try {
 			json = Helpers.readFileToStringWithoutNewlines(getBasePath() + "eyes.json");
@@ -252,6 +255,14 @@ public class Config {
 
 	public static void setDbBackupKeepForXDays(int dbBackupKeepForXDays) {
 		Config.dbBackupKeepForXDays = dbBackupKeepForXDays;
+	}
+
+	public static String getAdminSecret() {
+		return adminSecret;
+	}
+
+	public static void setAdminSecret(String adminSecret) {
+		Config.adminSecret = adminSecret;
 	}
 
 }

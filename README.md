@@ -30,7 +30,8 @@ Use this default template and adjust where relevant
   "dbPoolSize": 10,
   "dbBackupIntervalInMinutes": 720,
   "dbBackupDumpBinary": "mysqldump",
-  "dbBackupKeepForXDays": 20
+  "dbBackupKeepForXDays": 20,
+  "adminSecret": "***********"
 }
 ```
 
@@ -111,3 +112,7 @@ Example: "health":[[1619624880705,"some error"],[1619625601244,"another error!"]
 ### DB Setup
 You can either use MySQL Workbench or use https://github.com/tomoemon/mwb2sql to convert the current mwb file into the required INSERT statements to get your DB up and running:
 https://github.com/ozzi-/deployeye/blob/main/res/deployeye.mwb
+
+
+### Reload
+In order to reload all config during runtime, you may send a POST to /reload. In order to authenticate the request, send along a "X-SECRET" header with the value defined in app.json.
