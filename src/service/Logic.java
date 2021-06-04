@@ -183,8 +183,9 @@ public class Logic {
 						Log.logInfo("\\_ Loading cookie value from file '"+eye.getCookieValue()+"' as starting with @", Service.class);
 						cookieValue = Helpers.readFileToStringWithoutNewlines(eye.getCookieValue().substring(1));
 					}
-					String cookieString = eye.getCookieName()+"="+Helpers.censorValue(cookieValue,4);
-					Log.logInfo("\\_ Adding cookie '"+cookieString+"'", Service.class);
+					String cookieString = eye.getCookieName()+"="+cookieValue;
+					String cookieStringDesc = eye.getCookieName()+"="+Helpers.censorValue(cookieValue,4);
+					Log.logInfo("\\_ Adding cookie '"+cookieStringDesc+"'", Service.class);
 					conn.setRequestProperty("Cookie",cookieString);
 				}
 				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
