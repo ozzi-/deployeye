@@ -9,6 +9,7 @@ import org.quartz.SchedulerException;
 import helpers.Config;
 import helpers.Log;
 import persistence.DB;
+import pojo.RS;
 
 public class Scheduler   {
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -27,12 +28,18 @@ public class Scheduler   {
 			Log.logWarning("Scheduler - Exception trying to shutdown quartz scheduler - "+e.getMessage()+" - "+e.getCause(), Scheduler.class);			
 		}
 		
+		Runnable cleanUpRS = () -> {
+			RS.cleanUpRS();
+		};
+		scheduler.scheduleWithFixedDelay(cleanUpRS, 0, 10, TimeUnit.SECONDS);
+		
 	}
 
 	public static void schedule() throws SchedulerException {
 		Runnable task = () -> {
 			try {
-				Service.doChecks();
+				Logic.doHTTPGetCheck();
+				Logic.doCheckLogic();
 			} catch (Exception e) {
 				e.printStackTrace();
 				Log.logWarning("Scheduler - Exception doing checks - "+e.getMessage()+" - "+e.getCause(), Scheduler.class);			

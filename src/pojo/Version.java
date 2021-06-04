@@ -13,7 +13,7 @@ public class Version {
 		this.setId(id);
 		this.setEye_idfk(eye_idfk);
 		this.setDate(date);
-		this.setString(string);
+		this.setVersionString(string);
 	}
 
 	public int getId() {
@@ -40,11 +40,11 @@ public class Version {
 		this.date = date;
 	}
 
-	public String getString() {
+	public String getVersionString() {
 		return string;
 	}
 
-	public void setString(String string) {
+	public void setVersionString(String string) {
 		this.string = string;
 	}
 }

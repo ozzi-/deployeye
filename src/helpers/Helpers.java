@@ -28,6 +28,11 @@ public class Helpers {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(now);
 	}
 	
+	public static String censorValue(String value, int showAmount) {
+		int pos = value.length()>showAmount?showAmount:0;
+		return value.substring(0,pos)+value.substring(pos).replaceAll(".","*");
+	}
+	
 	public static JsonObject getJsonObjOfBody(String body) {
 		JsonParser parser = new JsonParser();
 		JsonElement jsonTree = parser.parse(body);

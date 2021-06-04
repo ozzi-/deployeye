@@ -212,7 +212,16 @@ function doRequestBodyInternal(method,data,type,url,callback,params){
 				params.push(request.status); 				
 				callback.apply(this,params);
 			} else{
-				showAlert("Something went wrong",response.error,"error");
+				if(request.status==404){
+					showAlert("404","Not found","error");	
+				}else{
+					try { 
+						var responseJSON = JSON.parse(request.responseText);
+						showAlert("Something went wrong",responseJSON.error,"error");
+					}catch(e){
+						showAlert("Something went wrong",request.responseText,"error");
+					}
+				}
 			}
 		}
 	};

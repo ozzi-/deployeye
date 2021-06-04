@@ -83,7 +83,7 @@ public class Config {
 		}
 	}
 
-	public static void loadEyes() {
+	public static void loadEyesFromConfig() {
 		String json = "";
 		try {
 			json = Helpers.readFileToStringWithoutNewlines(getBasePath() + "eyes.json");
@@ -127,7 +127,7 @@ public class Config {
 					eye.setHeaderName(eyeJO.getString("header_name"));
 				}
 				Log.logInfo("Loaded Eye '" + name + "'", Config.class);
-				Service.eyes.add(eye);
+				Service.getEyes().add(eye);
 			}
 		} catch (Exception e) {
 			System.err.println("Error parsing eyes json file at object \"" + curItem + "\"");
